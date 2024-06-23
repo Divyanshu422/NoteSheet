@@ -1,27 +1,30 @@
 /*
-    * In this couple of videos we will create a simple youtube form with 3 fields 
-    * (name, email and channel) and  a submit button. 
-    * we will implement the formik library into it -> for 
-    *                   1. managing the form state
-    *                   2. handling the form submission
-    *                   3. Error handling and validation
-    * 
+  * Lecture 3: 
+  * In this video we have installed the formik library using  `npm install formik --save'
+
+  * Step 1: Import the useFormik hook form the formik.  (Line 26)
+  *                    -  A hook is a function hence it must be called
+  *                    -  the useFormik hook consume the object and return the object.
+  *       the useFormik hook takes an object as a parameter and return
+  *       a object which contains varities of methods and properties which are used in the 
+  *       Form (like values property, onSubmit etc).
+  *       In our code we have called the return object as FormikObject ((Line 26))
 */
 
 /*
-    ! In this lecture we will create a basic structure of the form.
-    * there are 3 field => each field has a label and the input tag corresponding to 
-    * it. 
-    * for liking label and input tag we use `htmlfor` and `id` as same in the respective fields.
-    * Since we are using the form, so it will be mandatory to use type attribute in the butto fields as 
-    * submit otherwise there will be an warning on console window. 
-    * the teacher has provide the inbuilt css in the App.css. so i have used that only
-
+        * the useFormik hook takes the object as an input and return a object. in my
+        * code I have named the returned object as formikObject (Line 26). this object will 
+        * Helps in managing the state, handling the submission and validation + error
+        * message. 
 */
-
 import React from 'react'
+import { useFormik } from 'formik'
 
 function YoutubeForm() {
+
+  // Calling the hook. the useFormik hook consume the object
+  const FormikObject = useFormik({})
+  
   return (
     <div>
         <form>

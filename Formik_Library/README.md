@@ -6,3 +6,11 @@
           - Managing the form data
           - form submission
           - form validation and displaying the error
+
+# Lecture 2:
+
+- Created the skelton of the UI in react
+
+# Lecture 3:
+
+- Install the formil library and using the useFormik Hook in the YoutubeForm.js file
