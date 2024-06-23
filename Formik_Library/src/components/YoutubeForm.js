@@ -1,22 +1,20 @@
 /*
-  * Lecture 4 : Handling the submission of form 
-    *      There are 2 step to handle the submission using formik:
-    *       1. specify the onSubmit handler on the form tag whose value is equal to 
-    *               FormikObject.handleSubmit (FormikObject is the object returned by hook) => Line 45
-    * 
-    *       2. Define the onSubmit property in the useFormik hook. the property 
-    *           calls the callBack function. this callBack function receive 'values'
-    *           property as the parameter. values stores the current state value of 
-    *           each field.     =================> Line 37
-    *           the values incorporate the all values of field which we have accessed
-    *           using formik.values
-    *       3. when we click on the submit button => formik will automatically execute
-    *           the onSubmit property defined inside the useHook
+  * Lecture 5 and 6: Form validation
+  *   Formik allows the developer to define the validation function which is passed to the hook using the validate property.
+  *   the validate property just like the onSubmit property, receives the `values` object as its parameter. This `values object`
+  *   contains the current values of the form fields.
 */
 
 /*
-   
+ ! What validate function comprises of which is passed to validate property of the hook?
+ * 1. The validate function must return an object called errors. This object will hold error messages for each form 
+ *    field that fails validation.
+ * 2. The keys of the errors object should correspond to the names of the form fields. For example, if the form fields are 
+ *    name, email, and channel, the errors object should have keys like errors.name, errors.email, and errors.channel.
+ * 3. The values of the keys in the errors object should be strings that represent the error messages. For example, if the 
+ *    name field is empty, errors.name might be set to "required".
 */
+
 import React from 'react'
 import { useFormik } from 'formik'
 
@@ -27,17 +25,34 @@ function YoutubeForm() {
       email: '',
       channel: '',
     },
-    /* 
-      * Defining the onSubmit property: this property is a method which automatically receives the 
-      * Form state as its argument -> in the name of `values`.
-      * as told above the onSubmit is an method/Function. using the arrow function with values as parameter passed.
-      * the values is an inbuilt object provided by the FormikObject.
-      * the onSubmit button is automatically executed when the we click the submit button
-      */
     onSubmit: (values) => {
       console.log('the form data provided by the user is ',values);
-    } 
-    });
+    },
+    validate: (values) => {
+      // Creating the object with the name errors -> which is returned
+      const errors = {};
+      
+      // checking for name field => if values.name is not present then the errors.name hold the error Required.
+      if (!values.name) {
+        // the keys of the error object need to same as the values object
+        errors.name = 'Required';
+      }
+    
+      if (!values.email) {
+        errors.email = 'Required';
+      } 
+      // Checking the email for the regex
+      else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) {
+        errors.email = 'Invalid email format';
+      }
+    
+      if (!values.channel) {
+        errors.channel = 'Required';
+      }
+      // retuning the errors object.
+      return errors;
+    }
+  });
 
   
   return (
