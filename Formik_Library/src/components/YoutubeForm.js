@@ -1,16 +1,42 @@
 /*
-  ! Displaying the Error on the UI
-  * Formik provides an errors object that, similar to the values object, contains key-value pairs for each 
-  * form field, where the keys are the form field names and the values are the error messages specified 
-  * in the validate function.
-  * to display the error on the UI we need to apply the object.notations [FormikObject.error.(fieldname)]
+  * The form's validation function runs on each keystroke against the entire 
+  * form's values, causing all error messages to be displayed immediately, 
+  * even for fields the user hasn't interacted with yet. Problem Identified: 
+  * Displaying error messages for all fields, regardless of user interaction, 
+  * creates a poor user experience, especially if there are many fields.
 */
+/* 
+  ! Solution: 2 steps
+  * To track user interaction with fields, add the `onBlur prop` to form input elements, 
+  * passing in FormikObject.handleBlur, a helper method from Formik.
+  !              onBlur = FormikObject.handleBlur
+  TOdO: 
+  <input type='text' id ='name' name='name' onChange = {FormikObject.handleChange} value = {FormikObject.values.name} onBlur= {FormikObject.handleBlur}/>
+  * Formik stores information about visited fields in the touched object, which has 
+  * the same shape as the values object and updates to reflect user interactions.
+  *
+  ! Step 2: 
+  * Formik stores information about visited fields in the `touched object`, which has the 
+  * same shape as the values object and updates to reflect user interactions.
+   TODO: 
+   console.log('Visited fields are ', FormikObject.touched)
+  * With the touched object providing data on visited fields, the next step is to improve the UX by 
+  * only displaying error messages for fields the user has interacted with.
+  * The handleBlur method from Formik is used as the event handler for the onBlur event of input fields. 
+  * This updates the touched object, which is then used to conditionally display error messages, 
+  * providing a better user experience in form validation.
+*/
+
+
 /*
-  * The formicObject provided by the formik hook contains lot of properties and method (like values, errors, 
-  * handleSubmit, handleChange etc). it is this formicObject which provides the errors object which is used
-  * to display error message (created in previous lecture) on the UI.
-  * this error message will be populated with the same values as specified in the validate function 
+  * The touched object in Formik keeps track of the fields that have been visited, allowing for 
+  * improved validation UX by showing error messages only for fields that have been interacted with.
+  * Error messages are rendered only if the field has an error and has been visited (blur event). 
+  * This is achieved by checking both formik.touched.fieldName and formik.errors.fieldName.
+
+
 */
+
 import React from 'react'
 import { Formik, useFormik } from 'formik'
 
@@ -48,28 +74,18 @@ function YoutubeForm() {
     validate,
   }); 
 
-  // Logging the  the values on the console:
-  console.log('the data entered by the user', FormikObject.values);
-  // Logging the error on the console:
-  console.log('the error message', FormikObject.errors);
+  // Visited fields => saved in the object provided by FormikObject which is touched
+  console.log('Visited fields are ', FormikObject.touched)
 
   return (
     <div>
         <form onSubmit={FormikObject.handleSubmit}>
           <div className='form-control'>
               <label htmlFor='name'>Name:</label>
-              <input type='text' id ='name' name='name' onChange = {FormikObject.handleChange} value = {FormikObject.values.name}/>
-              {/* Displaying the error: if user clicked on the submit button without providing the values to the field
-                  then the error object has the value 'Required' for each field -> as done in previous commit .*/}
-              {/* By default the value to the FormikObject.errors.(fieldName) is Required. */}
-              {/*  Error messages are displayed conditionally in JSX under each input element. If an error message 
-                  exists for a field (e.g., formik.errors.name), it is rendered; otherwise, it renders null. */}
-              {/* To properly display error messages, each form control is enclosed in a div tag with the 
-                  class form-control, and error messages are given the class error.  */}
-              {/* If user has provided the value to the input tag then FormikObject.errors.name will be equal to 
-                  null. then the 2nd property will be rendered */}
+              <input type='text' id ='name' name='name' onChange = {FormikObject.handleChange} value = {FormikObject.values.name} onBlur= {FormikObject.handleBlur}/>
+           
               {
-                FormikObject.errors.name ? (<div className='error'>{FormikObject.errors.name}</div>):(null)
+                FormikObject.touched.name && FormikObject.errors.name ? (<div className='error'>{FormikObject.errors.name}</div>):(null)
               }
           </div>
 
@@ -77,8 +93,10 @@ function YoutubeForm() {
           <div className='form-control'>
               <label htmlFor='email'>Email:</label>
               <input type='email' id ='email' name='email' onChange = {FormikObject.handleChange} value = {FormikObject.values.email}/>
+              {/* * Adding the touched object => so that error is displayed only of the fields which 
+                    user has visited  */}
               {
-                FormikObject.errors.email ? (<div className='error'>{FormikObject.errors.email}</div>):(null)
+               FormikObject.touched.email && FormikObject.errors.email ? (<div className='error'>{FormikObject.errors.email}</div>):(null)
               }
 
           </div>
@@ -87,7 +105,7 @@ function YoutubeForm() {
               <label htmlFor='channel'>Channel:</label>
               <input type='text' id ='channel' name='channel' onChange = {FormikObject.handleChange} value = {FormikObject.values.channel} />
               {
-                FormikObject.errors.channel ? (<div className='error'> {FormikObject.errors.channel}</div>):(null)
+                FormikObject.touched.channel && FormikObject.errors.channel ? (<div className='error'> {FormikObject.errors.channel}</div>):(null)
               }
           </div>
 
