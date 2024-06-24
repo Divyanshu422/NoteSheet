@@ -1,22 +1,18 @@
 /*
-  ! Introducing the Formik Component: to reduce the code
-  * Formik components reduce boilerplate code by utilizing React context implicitly.
-  * Key Components Covered: The tutorial focuses on four Formik components: Formik, Form, Field, and 
-  * ErrorMessage.
+  * Adding the Form component:
+  *  1. import the Form from Formik
+  *  2. <Form> component simplifies form handling by automatically integrating with Formik's handleSubmit method.
+  *  3. It replaces the standard HTML <form> element in React applications and remove the onSubmit prop populated in the Form element
+  *           Earlier code:  <form onSubmit={FormikObject.handleSubmit}>
+  *           Node Code: <Form> 
 */
 
-/* 
-  * Using the Formik Component:
-  *   1. Step 1 => import formik instead of useFormik
-  Todo: Earlir code --------> import { useFormik } from 'formik'
-  * NowCode:  ---------------> import { formik } from 'formik'
-*/
 
-/*  
-  * Step 2 : remove the hook (useFormik) and 
-  * Step 3 : wrap the form with Formik component and pass the property used in the hook to the component
-  * Step 4 : pass the prop to the Formik Component as shown
-  !             <Formik initialValues = {initialValues} onSubmit = {onSubmit} validationSchema ={validationSchema}>
+/*
+    * hence 2 steps is followed 
+    * Step 1: import the Form component form the formik -> Line 19
+    * Step 2: replace the form tag with Form component and remove the onSubmit button -> Line 46
+
 */
 
 import React from 'react'
@@ -39,8 +35,6 @@ const initialValues =  {
 const onSubmit = (values) => {
   console.log('the form data provided by the user is ',values);
 };
-
-
 function YoutubeForm() {
   //* Hook is romoved
   return (
@@ -49,21 +43,17 @@ function YoutubeForm() {
       onSubmit = {onSubmit}
       validationSchema ={validationSchema}
     >
-        <form onSubmit={FormikObject.handleSubmit}>
+        <Form>
           <div className='form-control'>
               <label htmlFor='name'>Name:</label>
               <input type='text' id ='name' name='name' { ...FormikObject.getFieldProps('name')}/>
-           
               {
                 FormikObject.touched.name && FormikObject.errors.name ? (<div className='error'>{FormikObject.errors.name}</div>):(null)
               }
           </div>
-
           <div className='form-control'>
               <label htmlFor='email'>Email:</label>
               <input type='email' id ='email' name='email' { ...FormikObject.getFieldProps('email')}/>
-           
-
               {
                FormikObject.touched.email && FormikObject.errors.email ? (<div className='error'>{FormikObject.errors.email}</div>):(null)
               }
@@ -76,11 +66,9 @@ function YoutubeForm() {
                 FormikObject.touched.channel && FormikObject.errors.channel ? (<div className='error'> {FormikObject.errors.channel}</div>):(null)
               }
           </div>
-
             <button type = 'submit'>Submit</button>
-        </form>
+        </Form>
     </Formik>
   )
 }
-
 export default YoutubeForm
