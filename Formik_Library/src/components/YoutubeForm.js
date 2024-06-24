@@ -1,36 +1,28 @@
 /*
-  * Simplifying the code using the boilerPlate code
-  * 1. we have removed the validate Function from the code as we are using the validate Schema.
-  * 2. In the code there are 3 props in the input fields which are almost similar which are:
-  *               - onChange
-  *               - onBlur
-  *               - value prop
-  ToDo:  
-    <input type='email' id ='email' name='email' onChange = {FormikObject.handleChange} value = {FormikObject.values.email}/>
+  ! Introducing the Formik Component: to reduce the code
+  * Formik components reduce boilerplate code by utilizing React context implicitly.
+  * Key Components Covered: The tutorial focuses on four Formik components: Formik, Form, Field, and 
+  * ErrorMessage.
 */
 
-/*
-  * So formik is going to provide `getFieldprops` which will behind the schene add these 3 props
-  * to the input field.  Instead of manually adding onChange, onBlur, and value props to each 
-  * form field, getFieldProps consolidates these operations into a single line of code per field.
-  * Requires passing the name attribute of each form field as an argument to getFieldProps, 
-  * which then handles the assignment of necessary props internally.
+/* 
+  * Using the Formik Component:
+  *   1. Step 1 => import formik instead of useFormik
+  Todo: Earlir code --------> import { useFormik } from 'formik'
+  * NowCode:  ---------------> import { formik } from 'formik'
 */
 
-/*
-  ! Earlier code:
-    *  <input type='text' id ='name' name='name' onChange = {FormikObject.handleChange} value = {FormikObject.values.name} onBlur= {FormikObject.handleBlur}/>
-  ! New code:
-    *  <input type='text' id ='name' name='name' { ...FormikObject.getFieldProps(name)}/>
-    *       use of spread operator is mandatory
+/*  
+  * Step 2 : remove the hook (useFormik) and 
+  * Step 3 : wrap the form with Formik component and pass the property used in the hook to the component
+  * Step 4 : pass the prop to the Formik Component as shown
+  !             <Formik initialValues = {initialValues} onSubmit = {onSubmit} validationSchema ={validationSchema}>
 */
 
 import React from 'react'
-import { Formik, useFormik } from 'formik'
+import { formik } from 'formik'
 import * as Yup from 'yup'
 
-
-//! Validations schema
   const validationSchema = Yup.object({
       // Define the validation rules for each field
       name: Yup.string().required('Required the name'),
@@ -50,14 +42,13 @@ const onSubmit = (values) => {
 
 
 function YoutubeForm() {
-  const FormikObject = useFormik({
-    initialValues,
-    onSubmit,
-    // validate,
-    validationSchema,
-  }); 
+  //* Hook is romoved
   return (
-    <div>
+    <Formik
+      initialValues = {initialValues}
+      onSubmit = {onSubmit}
+      validationSchema ={validationSchema}
+    >
         <form onSubmit={FormikObject.handleSubmit}>
           <div className='form-control'>
               <label htmlFor='name'>Name:</label>
@@ -88,7 +79,7 @@ function YoutubeForm() {
 
             <button type = 'submit'>Submit</button>
         </form>
-    </div>
+    </Formik>
   )
 }
 
