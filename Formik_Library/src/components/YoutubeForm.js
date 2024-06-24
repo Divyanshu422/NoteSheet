@@ -1,44 +1,33 @@
 /*
-  * The form's validation function runs on each keystroke against the entire 
-  * form's values, causing all error messages to be displayed immediately, 
-  * even for fields the user hasn't interacted with yet. Problem Identified: 
-  * Displaying error messages for all fields, regardless of user interaction, 
-  * creates a poor user experience, especially if there are many fields.
+  * Yup is introduced as an alternative way to define validation rules in Formik.
+  * Yup is utilized to define a validationSchema object where rules for form fields 
+  * are specified. Examples include 
+  *         1. name as required (yup.string().required('Required')) and 
+  *         2. email as required and must match email format 
+  *                       (yup.string().email('Invalid email format').required('Required')).
 */
-/* 
-  ! Solution: 2 steps
-  * To track user interaction with fields, add the `onBlur prop` to form input elements, 
-  * passing in FormikObject.handleBlur, a helper method from Formik.
-  !              onBlur = FormikObject.handleBlur
-  TOdO: 
-  <input type='text' id ='name' name='name' onChange = {FormikObject.handleChange} value = {FormikObject.values.name} onBlur= {FormikObject.handleBlur}/>
-  * Formik stores information about visited fields in the touched object, which has 
-  * the same shape as the values object and updates to reflect user interactions.
-  *
-  ! Step 2: 
-  * Formik stores information about visited fields in the `touched object`, which has the 
-  * same shape as the values object and updates to reflect user interactions.
-   TODO: 
-   console.log('Visited fields are ', FormikObject.touched)
-  * With the touched object providing data on visited fields, the next step is to improve the UX by 
-  * only displaying error messages for fields the user has interacted with.
-  * The handleBlur method from Formik is used as the event handler for the onBlur event of input fields. 
-  * This updates the touched object, which is then used to conditionally display error messages, 
-  * providing a better user experience in form validation.
-*/
-
 
 /*
-  * The touched object in Formik keeps track of the fields that have been visited, allowing for 
-  * improved validation UX by showing error messages only for fields that have been interacted with.
-  * Error messages are rendered only if the field has an error and has been visited (blur event). 
-  * This is achieved by checking both formik.touched.fieldName and formik.errors.fieldName.
-
+  * Step 1: Define the validation schema for the input fields
+  * Step 2: The validationSchema object is integrated with Formik using the validationSchema 
+  *         property directly within useFormik() instead of a custom validate function.
+  * 
 
 */
 
 import React from 'react'
 import { Formik, useFormik } from 'formik'
+import * as Yup from 'yup'
+
+
+//! Validations schema
+  const validationSchema = Yup.object({
+      // Define the validation rules for each field
+      name: Yup.string().required('Required the name'),
+      email: Yup.string().required('Email is required').email('Invalid email format'),
+      channel: Yup.string().required('required')
+  })
+
 
 const initialValues =  {
   name: '',
@@ -71,11 +60,10 @@ function YoutubeForm() {
   const FormikObject = useFormik({
     initialValues,
     onSubmit,
-    validate,
+    // validate,
+    validationSchema,
   }); 
 
-  // Visited fields => saved in the object provided by FormikObject which is touched
-  console.log('Visited fields are ', FormikObject.touched)
 
   return (
     <div>
@@ -89,16 +77,13 @@ function YoutubeForm() {
               }
           </div>
 
-
           <div className='form-control'>
               <label htmlFor='email'>Email:</label>
               <input type='email' id ='email' name='email' onChange = {FormikObject.handleChange} value = {FormikObject.values.email}/>
-              {/* * Adding the touched object => so that error is displayed only of the fields which 
-                    user has visited  */}
+
               {
                FormikObject.touched.email && FormikObject.errors.email ? (<div className='error'>{FormikObject.errors.email}</div>):(null)
               }
-
           </div>
             
           <div className='form-control'>

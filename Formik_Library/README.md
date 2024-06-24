@@ -14,3 +14,7 @@
 # Lecture 3:
 
 - Install the formil library and using the useFormik Hook in the YoutubeForm.js file
+
+# Lecture 12:
+
+- Installing Yup for the validations of the form field
