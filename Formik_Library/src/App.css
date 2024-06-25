@@ -11,8 +11,6 @@ label {
 
 input[type="text"],
 input[type="email"],
-Form[type="text"],
-Form[type="email"],
 textarea {
   display: block;
   width: 400px;
