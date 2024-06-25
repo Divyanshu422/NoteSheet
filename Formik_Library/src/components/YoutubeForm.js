@@ -8,28 +8,32 @@
 */
 /*
   * Steps Involved: 
-  *          1. Import the ErrorMessage component from the formilk:
-  *          2. Remoe the error code which can be written till now
-  *          3. pass the ErrorMessage compoenent with the prop name
+  *         Step 1: Import ErrorMessage from Formik.
+  *         Step 2: Replace manual error rendering with <ErrorMessage> component.
+  *         Step 3: Set the name prop in <ErrorMessage> to match the name attribute of the corresponding <Field> component 
+  *                 for each form field.
   * 
-        ! Earlier code:
-         {
-               FormikObject.touched.email && FormikObject.errors.email ? (<div className='error'>{FormikObject.errors.email}</div>):(null)
+  * 
+  ! Earlier code:
+          {
+            FormikObject.touched.email && FormikObject.errors.email ? (<div className='error'>{FormikObject.errors.email}</div>):(null)
           }
-
-  *      New code:
+  !    New code:
   *      <ErrorMessage name = 'name'/>
+  *       the name prop passed to the ErrorMessage component is equal to the name attributed on the field component. the ErrorMessage component
+  *       will render the error message for the particular field indicated by the name prop Only if field is visited and error exist.
+  *       this means that ErrorMessage component has inbuilt => touched and errors object facilities
 */
 
 import React from 'react'
-import { formik, Field, Formik, ErrorMessage  } from 'formik'
+import { Form, Field, Formik, ErrorMessage  } from 'formik'
 import * as Yup from 'yup'
 
 const validationSchema = Yup.object({
       // Define the validation rules for each field
       name: Yup.string().required('Required the name'),
       email: Yup.string().required('Email is required').email('Invalid email format'),
-      channel: Yup.string().required('required')
+      channel: Yup.string().required('Required the channel name')
 })
 
 const initialValues =  {
